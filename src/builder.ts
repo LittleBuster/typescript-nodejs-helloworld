@@ -8,10 +8,8 @@
  */
 
 import { IFabric } from './fabric'
-import { IHandler, ServerHandlers } from './net/handlers/handler'
-import { IHandlers } from './net/handlers/handlers'
-import { IMeteoHandlers } from './net/handlers/meteo/handlers'
-import { ISecurityHandlers } from './net/handlers/security/handlers'
+import { IHandlers } from './net/handlers/handfab'
+import { IHandlersBuilder } from './net/handlers/hbuilder'
 import { INet } from './net/net'
 import { IService, Services } from './service'
 import { ILog } from './utils/log'
@@ -33,11 +31,9 @@ export interface IBuilder {
 export class Builder implements IBuilder {
     private utils: IUtils
     private net: INet
-    private handlers: IHandlers
-    private meteoHandlers: IMeteoHandlers
-    private securityHandlers: ISecurityHandlers
+    private handFab: IHandlers
+    private handBuilder: IHandlersBuilder
     private services: Map<Services, IService> = new Map<Services, IService>()
-    private hndls: Map<ServerHandlers, IHandler> = new Map<ServerHandlers, IHandler>()
 
     /**
      * Create main modules fabrics
@@ -47,7 +43,7 @@ export class Builder implements IBuilder {
     constructor(fab: IFabric) {
         this.utils = fab.createUtils()
         this.net = fab.createNet()
-        this.handlers = fab.createHandlers()
+        this.handFab = fab.createHandlers()
     }
 
     /**
@@ -62,19 +58,16 @@ export class Builder implements IBuilder {
      * Build all Handlers fabrics and all handlers
      */
     public buildHandlers() {
-        this.meteoHandlers = this.handlers.createMeteoHandlers(<ILog>this.getService(Services.LOG))
-        this.hndls.set(ServerHandlers.METEO_SENSOR, this.meteoHandlers.createSensorHandler(<ILog>this.getService(Services.LOG)))
-        this.hndls.set(ServerHandlers.METEO_MONITOR, this.meteoHandlers.createMonitorHandler(<ILog>this.getService(Services.LOG)))
-
-        this.securityHandlers = this.handlers.createSecurityHandlers(<ILog>this.getService(Services.LOG))
-        this.hndls.set(ServerHandlers.SECURITY_SENSOR, this.securityHandlers.createSensorHandler(<ILog>this.getService(Services.LOG)))
+        this.handBuilder = this.handFab.createHandlersBuilder(<ILog>this.getService(Services.LOG))
+        this.handBuilder.buildMeteoHandlers()
+        this.handBuilder.buildSecurityHandlers()
     }
 
     /**
      * Build all network modules
      */
     public buildNet() {
-        this.services.set(Services.SERVER, this.net.createServer(<ILog>this.getService(Services.LOG), this.hndls))
+        this.services.set(Services.SERVER, this.net.createServer(<ILog>this.getService(Services.LOG), this.handBuilder))
     }
 
     /**

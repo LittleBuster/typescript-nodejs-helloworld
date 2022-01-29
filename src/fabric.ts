@@ -7,7 +7,7 @@
  * fabric.ts
  */
 
-import { Handlers, IHandlers } from './net/handlers/handlers'
+import { Handlers, IHandlers } from './net/handlers/handfab'
 import { INet, Net } from './net/net'
 import { Utils, IUtils } from './utils/utils'
 
