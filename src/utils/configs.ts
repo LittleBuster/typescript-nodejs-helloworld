@@ -7,13 +7,12 @@
  * configs.ts
  */
 
-import { IService } from '../service'
 import { ILog } from './log'
 
 /**
  * Interface of configs module
  */
-export interface IConfigs extends IService {
+export interface IConfigs {
     load(): void
 }
 

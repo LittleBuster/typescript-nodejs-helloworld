@@ -8,7 +8,6 @@
  */
 
 import { IBuilder } from './builder'
-import { Services } from './service'
 import { ILog } from './utils/log'
 import { IConfigs } from './utils/configs'
 import { IServer } from './net/server'
@@ -41,9 +40,9 @@ export class Application {
      * Loading configs and start application modules
      */
     public start() {
-        const log = <ILog>this.builder.getService(Services.LOG)
-        const cfg = <IConfigs>this.builder.getService(Services.CONFIGS)
-        const server = <IServer>this.builder.getService(Services.SERVER)
+        const log = this.builder.getLog()
+        const cfg = this.builder.getConfigs()
+        const server = this.builder.getServer()
 
         log.logging("Starting application...")
 

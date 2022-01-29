@@ -16,42 +16,51 @@ import { SecurityHandlers, ISecurityHandlers } from "./security/handlers";
  * Interface of Handlers fabric
  */
 export interface IHandlers {
-    createHandlersBuilder(log: ILog): IHandlersBuilder
-    createMeteoHandlers(log: ILog): IMeteoHandlers
-    createSecurityHandlers(log: ILog): ISecurityHandlers
+    createHandlersBuilder(): IHandlersBuilder
+    createMeteoHandlers(): IMeteoHandlers
+    createSecurityHandlers(): ISecurityHandlers
 }
 
 /**
  * All handlers fabric
  */
 export class Handlers implements IHandlers {
+    private log: ILog
+
+    /**
+     * Init dependencies
+     * 
+     * @param log Logger module reference
+     */
+    constructor(log: ILog) {
+        this.log = log
+    }
+
     /**
      * Create all handlers builder
      * 
      * @param log Logger module reference
      * @returns Handlers Builder
      */
-    public createHandlersBuilder(log: ILog): IHandlersBuilder {
-        return new HandlersBuilder(log, this)
+    public createHandlersBuilder(): IHandlersBuilder {
+        return new HandlersBuilder(this.log, this)
     }
 
     /**
      * Create meteo handlers fabric
      * 
-     * @param log Logger module
      * @returns All meteo handlers fabric
      */
-    public createMeteoHandlers(log: ILog): IMeteoHandlers {
-        return new MeteoHandlers()
+    public createMeteoHandlers(): IMeteoHandlers {
+        return new MeteoHandlers(this.log)
     }
 
     /**
      * Create Security handlers fabric
      * 
-     * @param log Logger module reference
      * @returns Security handlers fabric
      */
-    public createSecurityHandlers(log: ILog): ISecurityHandlers {
-        return new SecurityHandlers()
+    public createSecurityHandlers(): ISecurityHandlers {
+        return new SecurityHandlers(this.log)
     }
 }

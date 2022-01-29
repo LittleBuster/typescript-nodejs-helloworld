@@ -15,20 +15,30 @@ import { SecuritySensorHandler } from "./sensor"
  * Interface for Security Handlers fabric
  */
 export interface ISecurityHandlers {
-    createSensorHandler(log: ILog): IHandler
+    createSensorHandler(): IHandler
 }
 
 /**
  * Security handlers fabric
  */
 export class SecurityHandlers implements ISecurityHandlers {
+    private log: ILog
+
+    /**
+     * Init dependencies
+     * 
+     * @param log Logger module reference
+     */
+    constructor(log: ILog) {
+        this.log = log
+    }
+
     /**
      * Create security handler
      * 
-     * @param log Logger module reference
      * @returns Security Sensor handler module
      */
-    public createSensorHandler(log: ILog): IHandler {
-        return new SecuritySensorHandler(log)
+    public createSensorHandler(): IHandler {
+        return new SecuritySensorHandler(this.log)
     }
 }

@@ -7,12 +7,10 @@
  * log.ts
  */
 
-import { IService } from '../service'
-
 /**
  * Interface of logger
  */
-export interface ILog extends IService {
+export interface ILog {
     logging(msg: string): void
 }
 
