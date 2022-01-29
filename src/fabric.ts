@@ -9,6 +9,7 @@
 
 import { Handlers, IHandlers } from './net/handlers/handfab'
 import { INet, Net } from './net/net'
+import { ILog } from './utils/log'
 import { Utils, IUtils } from './utils/utils'
 
 /**
@@ -17,7 +18,7 @@ import { Utils, IUtils } from './utils/utils'
 export interface IFabric {
     createUtils(): IUtils
     createNet(): INet
-    createHandlers(): IHandlers
+    createHandlers(log: ILog): IHandlers
 }
 
 /**
@@ -46,9 +47,10 @@ export class Fabric implements IFabric {
     /**
      * Create Handlers fabric
      * 
+     * @param log Logger module reference
      * @returns Handlers fabric
      */
-    public createHandlers(): IHandlers {
-        return new Handlers()
+    public createHandlers(log: ILog): IHandlers {
+        return new Handlers(log)
     }
 }
