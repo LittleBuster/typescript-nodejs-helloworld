@@ -8,14 +8,14 @@
  */
 
 import { ILog } from "../utils/log";
-import { IHandler, ServerHandlers } from "./handlers/handler";
+import { IHandlersBuilder } from "./handlers/hbuilder";
 import { Server, IServer } from "./server";
 
 /**
  * Interface of Net module
  */
 export interface INet {
-    createServer(log: ILog, handlers: Map<ServerHandlers, IHandler>): IServer
+    createServer(log: ILog, handBuilder: IHandlersBuilder): IServer
 }
 
 /**
@@ -29,7 +29,7 @@ export class Net implements INet {
      * @param handlers Handlers list
      * @returns Netowrk server
      */
-    public createServer(log: ILog, handlers: Map<ServerHandlers, IHandler>): IServer {
-        return new Server(log, handlers)
+    public createServer(log: ILog, handBuilder: IHandlersBuilder): IServer {
+        return new Server(log, handBuilder)
     }
 }
