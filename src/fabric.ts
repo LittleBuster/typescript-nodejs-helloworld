@@ -7,50 +7,47 @@
  * fabric.ts
  */
 
-import { Handlers, IHandlers } from './net/handlers/handfab'
-import { INet, Net } from './net/net'
-import { ILog } from './utils/log'
-import { Utils, IUtils } from './utils/utils'
+import { HandlersBuilder, IHandlersBuilder } from "./net/handlers/handbld";
+import { HandlersFabric, IHandlersFabric } from "./net/handlers/handfab";
+import { Server, IServer } from "./net/server";
+import { Configs, IConfigs } from "./utils/configs";
+import { ILog, Log } from "./utils/log";
 
-/**
- * Interface for main fabric
- */
 export interface IFabric {
-    createUtils(): IUtils
-    createNet(): INet
-    createHandlers(log: ILog): IHandlers
+    createLog(): ILog
+    createConfigs(log: ILog): IConfigs
+    createServer(log: ILog, handBld: IHandlersBuilder): IServer
+    createHandFabric(log: ILog): IHandlersFabric
+    createHandBuilder(handFab: IHandlersFabric): IHandlersBuilder 
 }
 
-/**
- * Main application fabric of all modules fabrics
- * for creating main app modules
- */
 export class Fabric implements IFabric {
-    /**
-     * Create Utils modules fabric
-     * 
-     * @returns Utils fabric
-     */
-    public createUtils(): IUtils {
-        return new Utils()
+    private static instanse: IFabric
+
+    public static getInstance(): IFabric {
+        if (!this.instanse) {
+            this.instanse = new Fabric()
+        }
+        return this.instanse
     }
 
-    /**
-     * Create Net modules fabric
-     * 
-     * @returns Net fabric
-     */
-    public createNet(): INet {
-        return new Net()
+    public createLog(): ILog {
+        return new Log()
     }
 
-    /**
-     * Create Handlers fabric
-     * 
-     * @param log Logger module reference
-     * @returns Handlers fabric
-     */
-    public createHandlers(log: ILog): IHandlers {
-        return new Handlers(log)
+    public createConfigs(log: ILog): IConfigs {
+        return new Configs(log)
+    }
+
+    public createServer(log: ILog, handBld: IHandlersBuilder): IServer {
+        return new Server(log, handBld);
+    }
+
+    public createHandFabric(log: ILog): IHandlersFabric {
+        return new HandlersFabric(log)
+    }
+
+    public createHandBuilder(handFab: IHandlersFabric): IHandlersBuilder {
+        return new HandlersBuilder(handFab)
     }
 }

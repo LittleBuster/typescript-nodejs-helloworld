@@ -7,17 +7,14 @@
  * main.ts
  */
 
-import { Application } from './application'
+import { App } from './app'
 import { Builder } from './builder'
 import { Fabric } from './fabric'
 
-/**
- * Main function of application
- */
 function main() {
-    const fabric = new Fabric()
-    const builder = new Builder(fabric)
-    const app = new Application(builder)
+    const fab = Fabric.getInstance()
+    const builder = Builder.getInstance(fab)
+    const app = App.getInstance(builder)
 
     app.buildApp()
     app.start()
