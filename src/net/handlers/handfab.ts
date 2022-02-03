@@ -4,63 +4,36 @@
  * Copyright (C) 2022 Sergey Denisov GPLv3
  * Written by Sergey Denisov aka LittleBuster (DenisovS21@gmail.com)
  * 
- * handlers.ts
+ * handfab.ts
  */
 
 import { ILog } from "../../utils/log";
-import { HandlersBuilder, IHandlersBuilder } from "./hbuilder";
-import { MeteoHandlers, IMeteoHandlers } from "./meteo/handlers";
-import { SecurityHandlers, ISecurityHandlers } from "./security/handlers";
+import { IHandler } from "./handler";
+import { MeteoMonitorHandler } from "./meteo/monitor";
+import { MeteoSensorHandler } from "./meteo/sensor";
+import { SecuritySensorHandler } from "./security/sensor";
 
-/**
- * Interface of Handlers fabric
- */
-export interface IHandlers {
-    createHandlersBuilder(): IHandlersBuilder
-    createMeteoHandlers(): IMeteoHandlers
-    createSecurityHandlers(): ISecurityHandlers
+export interface IHandlersFabric {
+    createMeteoSensor(): IHandler
+    createMeteoMonitor(): IHandler
+    createSecuritySensor(): IHandler
 }
 
-/**
- * All handlers fabric
- */
-export class Handlers implements IHandlers {
-    private log: ILog
+export class HandlersFabric implements IHandlersFabric {
+    constructor(
+        protected log: ILog
+    )
+    { }
 
-    /**
-     * Init dependencies
-     * 
-     * @param log Logger module reference
-     */
-    constructor(log: ILog) {
-        this.log = log
+    public createMeteoSensor(): IHandler {
+        return new MeteoSensorHandler(this.log)
     }
 
-    /**
-     * Create all handlers builder
-     * 
-     * @param log Logger module reference
-     * @returns Handlers Builder
-     */
-    public createHandlersBuilder(): IHandlersBuilder {
-        return new HandlersBuilder(this.log, this)
+    public createMeteoMonitor(): IHandler {
+        return new MeteoMonitorHandler(this.log)
     }
-
-    /**
-     * Create meteo handlers fabric
-     * 
-     * @returns All meteo handlers fabric
-     */
-    public createMeteoHandlers(): IMeteoHandlers {
-        return new MeteoHandlers(this.log)
-    }
-
-    /**
-     * Create Security handlers fabric
-     * 
-     * @returns Security handlers fabric
-     */
-    public createSecurityHandlers(): ISecurityHandlers {
-        return new SecurityHandlers(this.log)
+    
+    public createSecuritySensor(): IHandler {
+        return new SecuritySensorHandler(this.log)
     }
 }

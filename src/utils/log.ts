@@ -7,23 +7,12 @@
  * log.ts
  */
 
-/**
- * Interface of logger
- */
 export interface ILog {
     logging(msg: string): void
 }
 
-/**
- * Logger module
- */
 export class Log implements ILog {
-    /**
-     * Print log message to console
-     * 
-     * @param msg Text message
-     */
-    public logging(msg: string) {
+    public logging(msg: string): void {
         console.log(msg)
     }
 }

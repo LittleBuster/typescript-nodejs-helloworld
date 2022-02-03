@@ -7,34 +7,20 @@
  * configs.ts
  */
 
-import { ILog } from './log'
+import { ILog } from "./log";
 
-/**
- * Interface of configs module
- */
 export interface IConfigs {
-    load(): void
+    loadFromFile(): void
 }
 
-/**
- * Configs module
- */
 export class Configs implements IConfigs {
-    private log: ILog
+    constructor(
+        protected log: ILog
+    )
+    { }
 
-    /**
-     * Init logger reference
-     * 
-     * @param log Logger module reference
-     */
-    constructor(log: ILog) {
-        this.log = log
+    public loadFromFile(): void {
+        this.log.logging("loading cfg")
     }
 
-    /**
-     * Loading configs from file
-     */
-    public load() {
-        this.log.logging("Loading configs")
-    }
 }
